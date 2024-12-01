@@ -9,7 +9,7 @@ function App() {
     amount: "",
   });
   const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
 
   const currencyCodes = [
     "USD",
@@ -30,27 +30,30 @@ function App() {
   // Add a function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Reset error state
+    setResult(null); // Clear previous result
+
+    if (!formData.from || !formData.to || !formData.amount) {
+      setError("Please fill out all fields before converting.");
+      return;
+    }
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/convert",
+        "https://currencyconverter-d6w2.onrender.com/api/convert",
         formData
       );
       setResult(response?.data);
-      setError("");
-    } catch {
-      error;
-    }
-    {
+    } catch (error) {
       setError(
-        "Error",
-        error?.response ? error?.response?.data : error?.message
+        error?.response?.data?.message ||
+          "Something went wrong. Please try again."
       );
     }
   };
 
   return (
-    <div>
+    <div className="app-container">
       <form onSubmit={handleSubmit}>
         <label>
           From:
@@ -98,10 +101,12 @@ function App() {
           Convert
         </button>
       </form>
+
+      {error && <div className="error-message">{error}</div>}
       {result && (
         <div className="result">
           <p>
-            Converted Amount : {result.convertedAmount} {result.target}
+            Converted Amount: {result.convertedAmount} {result.target}
           </p>
           <p>Conversion Rate: {result.conversionRate}</p>
         </div>
@@ -111,7 +116,7 @@ function App() {
         <h1>Why Choose Global Currency Converter?</h1>
         <p>
           Global Currency Converter is a free online tool that allows you to
-          convert one currency to another
+          convert one currency to another in real-time with high accuracy.
         </p>
       </section>
     </div>
