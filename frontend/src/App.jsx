@@ -33,7 +33,7 @@ function App() {
 
     try {
       const response = await axios.post(
-        "http://localhost:10000/api/convert",
+        "https://currencyconverter-d6w2.onrender.com/api/convert",
         formData
       );
       setResult(response?.data);
