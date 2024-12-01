@@ -27,7 +27,6 @@ function App() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // Add a function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Reset error state
